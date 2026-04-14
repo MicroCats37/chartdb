@@ -1,0 +1,123 @@
+datasource db {
+  provider = "sqlite"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Diagram {
+  id              String         @id
+  name            String
+  databaseType    String
+  databaseEdition String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  tables          DBTable[]
+  relationships   DBRelationship[]
+  dependencies    DBDependency[]
+  areas           Area[]
+  customTypes     DBCustomType[]
+  notes           Note[]
+  filter          DiagramFilter?
+}
+
+model DBTable {
+  id                 String   @id
+  diagramId          String
+  diagram            Diagram  @relation(fields: [diagramId], references: [id], onDelete: Cascade)
+  name               String
+  schema             String?
+  x                  Float
+  y                  Float
+  fields             String   // JSON stringified
+  indexes            String   // JSON stringified
+  checkConstraints   String?  // JSON stringified
+  color              String
+  isView             Boolean  @default(false)
+  isMaterializedView Boolean? @default(false)
+  createdAt          Float
+  width              Float?
+  comments           String?
+  order              Int?
+  expanded           Boolean? @default(true)
+  parentAreaId       String?
+}
+
+model DBRelationship {
+  id              String   @id
+  diagramId       String
+  diagram         Diagram  @relation(fields: [diagramId], references: [id], onDelete: Cascade)
+  name            String
+  sourceSchema    String?
+  sourceTableId   String
+  targetSchema    String?
+  targetTableId   String
+  sourceFieldId   String
+  targetFieldId   String
+  sourceCardinality String
+  targetCardinality String
+  createdAt       Float
+}
+
+model DBDependency {
+  id              String   @id
+  diagramId       String
+  diagram         Diagram  @relation(fields: [diagramId], references: [id], onDelete: Cascade)
+  schema          String?
+  tableId         String
+  dependentSchema String?
+  dependentTableId String
+  createdAt       Float
+}
+
+model Area {
+  id        String   @id
+  diagramId String
+  diagram   Diagram  @relation(fields: [diagramId], references: [id], onDelete: Cascade)
+  name      String
+  x         Float
+  y         Float
+  width     Float
+  height    Float
+  color     String
+  order     Int?
+}
+
+model DBCustomType {
+  id        String   @id
+  diagramId String
+  diagram   Diagram  @relation(fields: [diagramId], references: [id], onDelete: Cascade)
+  schema    String?
+  name      String
+  kind      String
+  values    String?  // JSON stringified
+  fields    String?  // JSON stringified
+  order     Int?
+}
+
+model Note {
+  id        String   @id
+  diagramId String
+  diagram   Diagram  @relation(fields: [diagramId], references: [id], onDelete: Cascade)
+  content   String
+  x         Float
+  y         Float
+  width     Float
+  height    Float
+  color     String
+  order     Int?
+}
+
+model ChartDBConfig {
+  id               Int      @id @default(1)
+  defaultDiagramId String
+  exportActions    String?  // JSON stringified
+}
+
+model DiagramFilter {
+  diagramId String   @id
+  diagram   Diagram  @relation(fields: [diagramId], references: [id], onDelete: Cascade)
+  schemaIds String?  // JSON stringified
+  tableIds  String?  // JSON stringified
+}
