@@ -9,7 +9,7 @@ describe('Geometry API (Areas & Notes)', () => {
         await fetch(`${BASE_URL}/diagrams`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: diagramId, name: 'Diagrama Geometría' })
+            body: JSON.stringify({ id: diagramId, name: 'Diagrama Geometría' }),
         });
     });
 
@@ -25,9 +25,12 @@ describe('Geometry API (Areas & Notes)', () => {
                 id: `area-${Date.now()}`,
                 diagramId: diagramId,
                 name: 'Zona Legales',
-                x: 0, y: 0, width: 500, height: 500,
-                color: '#ff0000'
-            })
+                x: 0,
+                y: 0,
+                width: 500,
+                height: 500,
+                color: '#ff0000',
+            }),
         });
         expect(res.status).toBe(201);
     });
@@ -40,19 +43,26 @@ describe('Geometry API (Areas & Notes)', () => {
                 id: `note-${Date.now()}`,
                 diagramId: diagramId,
                 content: 'Esta tabla requiere auditoría especial',
-                x: 100, y: 100, width: 200, height: 150,
-                color: '#ffff00'
-            })
+                x: 100,
+                y: 100,
+                width: 200,
+                height: 150,
+                color: '#ffff00',
+            }),
         });
         expect(res.status).toBe(201);
     });
 
     it('Verificar recuperación de ambos', async () => {
-        const resAreas = await fetch(`${BASE_URL}/areas?diagramId=${diagramId}`);
+        const resAreas = await fetch(
+            `${BASE_URL}/areas?diagramId=${diagramId}`
+        );
         const areas = await resAreas.json();
         expect(areas.length).toBe(1);
 
-        const resNotes = await fetch(`${BASE_URL}/notes?diagramId=${diagramId}`);
+        const resNotes = await fetch(
+            `${BASE_URL}/notes?diagramId=${diagramId}`
+        );
         const notes = await resNotes.json();
         expect(notes.length).toBe(1);
     });

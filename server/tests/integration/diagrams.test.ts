@@ -12,8 +12,8 @@ describe('Diagrams API', () => {
             body: JSON.stringify({
                 id: `diag-test-${Date.now()}`,
                 name: 'Diagrama de Prueba Unitario',
-                databaseType: 'sqlite'
-            })
+                databaseType: 'sqlite',
+            }),
         });
         const data = await res.json();
         expect(res.status).toBe(201);
@@ -26,14 +26,14 @@ describe('Diagrams API', () => {
         const data = await res.json();
         expect(res.status).toBe(200);
         expect(Array.isArray(data)).toBe(true);
-        expect(data.some((d: any) => d.id === diagramId)).toBe(true);
+        expect(data.some((d: { id: string }) => d.id === diagramId)).toBe(true);
     });
 
     it('PUT /api/diagrams/:id - Debe actualizar el nombre', async () => {
         const res = await fetch(`${BASE_URL}/diagrams/${diagramId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: 'Nombre Actualizado' })
+            body: JSON.stringify({ name: 'Nombre Actualizado' }),
         });
         expect(res.status).toBe(200);
 
@@ -43,12 +43,16 @@ describe('Diagrams API', () => {
     });
 
     it('DELETE /api/diagrams/:id - Debe eliminar el diagrama', async () => {
-        const res = await fetch(`${BASE_URL}/diagrams/${diagramId}`, { method: 'DELETE' });
+        const res = await fetch(`${BASE_URL}/diagrams/${diagramId}`, {
+            method: 'DELETE',
+        });
         expect(res.status).toBe(200);
 
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
-        const check = await fetch(`${BASE_URL}/diagrams/${diagramId}?t=${Date.now()}`);
+        const check = await fetch(
+            `${BASE_URL}/diagrams/${diagramId}?t=${Date.now()}`
+        );
         expect(check.status).toBe(404);
     });
 });

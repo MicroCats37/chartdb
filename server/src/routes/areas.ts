@@ -1,63 +1,66 @@
 import { Router } from 'express';
-import prisma from '../db.js';
+import { ZodError } from 'zod';
+import { areaService } from '../services/area.service.js';
 
 export const areasRouter = Router();
 
 areasRouter.get('/', async (req, res) => {
     try {
         const diagramId = req.query.diagramId as string;
-        const items = diagramId 
-            ? await prisma.area.findMany({ where: { diagramId } })
-            : await prisma.area.findMany();
+        const items = await areaService.list(diagramId);
         res.json(items);
-    } catch (e: any) {
+    } catch (e) {
         console.error(e);
-        res.status(500).json({ error: e.message || 'Internal server error' });
+        res.status(500).json({
+            error: (e as Error).message || 'Internal server error',
+        });
     }
 });
 
 areasRouter.post('/', async (req, res) => {
     try {
-        const { id, diagramId, name, x, y, width, height, color, order } = req.body;
-        await prisma.area.create({
-            data: {
-                id,
-                diagramId,
-                name: name || 'Nueva Area',
-                x: x ?? 0,
-                y: y ?? 0,
-                width: width ?? 200,
-                height: height ?? 200,
-                color: color || '#e0e0e0',
-                order: order ?? 0
-            }
-        });
-        res.status(201).json({ id });
-    } catch (e: any) {
+        const result = await areaService.create(req.body);
+        res.status(201).json(result);
+    } catch (e) {
+        if (e instanceof ZodError) {
+            return res.status(400).json({
+                error: 'Validation failed',
+                details: e.flatten(),
+            });
+        }
         console.error('[POST AREA ERROR]', e);
-        res.status(500).json({ error: e.message || 'Internal server error' });
+        res.status(500).json({
+            error: (e as Error).message || 'Internal server error',
+        });
     }
 });
 
 areasRouter.put('/:id', async (req, res) => {
     try {
-        await prisma.area.update({
-            where: { id: req.params.id },
-            data: req.body
-        });
+        await areaService.update(req.params.id, req.body);
         res.sendStatus(200);
-    } catch (e: any) {
+    } catch (e) {
+        if (e instanceof ZodError) {
+            return res.status(400).json({
+                error: 'Validation failed',
+                details: e.flatten(),
+            });
+        }
         console.error(e);
-        res.status(500).json({ error: e.message || 'Internal server error' });
+        res.status(500).json({
+            error: (e as Error).message || 'Internal server error',
+        });
     }
 });
 
 areasRouter.delete('/:id', async (req, res) => {
     try {
-        await prisma.area.delete({ where: { id: req.params.id } });
+        await areaService.delete(req.params.id);
         res.sendStatus(200);
-    } catch (e: any) {
+    } catch (e) {
         console.error(e);
-        res.status(500).json({ error: e.message || 'Internal server error' });
+        res.status(500).json({
+            error: (e as Error).message || 'Internal server error',
+        });
     }
 });

@@ -13,45 +13,50 @@ export default defineConfig(({ mode }) => {
                 '/api': {
                     target: env.VITE_API_URL || 'http://localhost:3000',
                     changeOrigin: true,
-                }
-            }
-        },
-    plugins: [
-        react(),
-        visualizer({
-            filename: './stats/stats.html',
-            open: false,
-        }),
-        UnpluginInjectPreload({
-            files: [
-                {
-                    entryMatch: /logo-light.png$/,
-                    outputMatch: /logo-light-.*.png$/,
-                },
-                {
-                    entryMatch: /logo-dark.png$/,
-                    outputMatch: /logo-dark-.*.png$/,
-                },
-            ],
-        }),
-    ],
-    resolve: {
-        alias: {
-            '@': path.resolve(__dirname, './src'),
-        },
-    },
-    build: {
-        rollupOptions: {
-            external: (id) => /__test__/.test(id),
-            output: {
-                assetFileNames: (assetInfo) => {
-                    if (assetInfo.names && assetInfo.originalFileNames.some(name => name.startsWith('src/assets/templates/'))) {
-                        return 'assets/[name][extname]';
-                    }
-                    return 'assets/[name]-[hash][extname]';
                 },
             },
         },
-    },
+        plugins: [
+            react(),
+            visualizer({
+                filename: './stats/stats.html',
+                open: false,
+            }),
+            UnpluginInjectPreload({
+                files: [
+                    {
+                        entryMatch: /logo-light.png$/,
+                        outputMatch: /logo-light-.*.png$/,
+                    },
+                    {
+                        entryMatch: /logo-dark.png$/,
+                        outputMatch: /logo-dark-.*.png$/,
+                    },
+                ],
+            }),
+        ],
+        resolve: {
+            alias: {
+                '@': path.resolve(__dirname, './src'),
+            },
+        },
+        build: {
+            rollupOptions: {
+                external: (id) => /__test__/.test(id),
+                output: {
+                    assetFileNames: (assetInfo) => {
+                        if (
+                            assetInfo.names &&
+                            assetInfo.originalFileNames.some((name) =>
+                                name.startsWith('src/assets/templates/')
+                            )
+                        ) {
+                            return 'assets/[name][extname]';
+                        }
+                        return 'assets/[name]-[hash][extname]';
+                    },
+                },
+            },
+        },
     };
 });

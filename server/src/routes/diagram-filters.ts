@@ -1,19 +1,14 @@
 import { Router } from 'express';
-import prisma from '../db.js';
+import { ZodError } from 'zod';
+import { filterService } from '../services/filter.service.js';
 
 export const diagramFiltersRouter = Router();
 
 diagramFiltersRouter.get('/:diagramId', async (req, res) => {
     try {
-        const filter = await prisma.diagramFilter.findUnique({
-            where: { diagramId: req.params.diagramId }
-        });
+        const filter = await filterService.get(req.params.diagramId);
         if (!filter) return res.json(undefined);
-        
-        res.json({
-            schemaIds: filter.schemaIds ? JSON.parse(filter.schemaIds) : undefined,
-            tableIds: filter.tableIds ? JSON.parse(filter.tableIds) : undefined,
-        });
+        res.json(filter);
     } catch (e) {
         console.error(e);
         res.status(500).json({ error: 'Internal server error' });
@@ -22,21 +17,15 @@ diagramFiltersRouter.get('/:diagramId', async (req, res) => {
 
 diagramFiltersRouter.put('/:diagramId', async (req, res) => {
     try {
-        const { schemaIds, tableIds } = req.body;
-        await prisma.diagramFilter.upsert({
-            where: { diagramId: req.params.diagramId },
-            update: {
-                schemaIds: schemaIds ? JSON.stringify(schemaIds) : null,
-                tableIds: tableIds ? JSON.stringify(tableIds) : null
-            },
-            create: {
-                diagramId: req.params.diagramId,
-                schemaIds: schemaIds ? JSON.stringify(schemaIds) : null,
-                tableIds: tableIds ? JSON.stringify(tableIds) : null
-            }
-        });
+        await filterService.update(req.params.diagramId, req.body);
         res.sendStatus(200);
     } catch (e) {
+        if (e instanceof ZodError) {
+            return res.status(400).json({
+                error: 'Validation failed',
+                details: e.flatten(),
+            });
+        }
         console.error(e);
         res.status(500).json({ error: 'Internal server error' });
     }
@@ -44,9 +33,7 @@ diagramFiltersRouter.put('/:diagramId', async (req, res) => {
 
 diagramFiltersRouter.delete('/:diagramId', async (req, res) => {
     try {
-        await prisma.diagramFilter.deleteMany({
-            where: { diagramId: req.params.diagramId }
-        });
+        await filterService.delete(req.params.diagramId);
         res.sendStatus(200);
     } catch (e) {
         console.error(e);

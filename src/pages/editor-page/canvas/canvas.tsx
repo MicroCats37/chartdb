@@ -176,6 +176,17 @@ const tableToTableNode = (
         targetEdgeCounts?: Record<string, number>;
     }
 ): TableNodeType => {
+    console.log(
+        'Rendering Table:',
+        table.id,
+        table.name,
+        'x:',
+        table.x,
+        'y:',
+        table.y,
+        'width:',
+        table.width ?? MIN_TABLE_SIZE
+    );
     // Always use absolute position for now
     const position = { x: table.x, y: table.y };
 
@@ -194,6 +205,14 @@ const tableToTableNode = (
             (!showDBViews && table.isView);
     }
 
+    console.log(
+        'Table node result:',
+        table.id,
+        'hidden:',
+        hidden,
+        'width:',
+        table.width ?? MIN_TABLE_SIZE
+    );
     return {
         id: table.id,
         type: 'table',
@@ -223,6 +242,19 @@ const areaToAreaNode = (
         filterLoading: boolean;
     }
 ): AreaNodeType => {
+    console.log(
+        'Rendering Area:',
+        area.id,
+        area.name,
+        'x:',
+        area.x,
+        'y:',
+        area.y,
+        'width:',
+        area.width,
+        'height:',
+        area.height
+    );
     // Get all tables in this area
     const tablesInArea = tables.filter((t) => t.parentAreaId === area.id);
 
@@ -239,6 +271,14 @@ const areaToAreaNode = (
             })
         );
 
+    console.log(
+        'Area node result:',
+        area.id,
+        'hidden:',
+        !hasVisibleTable || filterLoading,
+        'tablesInArea:',
+        tablesInArea.length
+    );
     return {
         id: area.id,
         type: 'area',

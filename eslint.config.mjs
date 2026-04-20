@@ -69,9 +69,28 @@ export default [
                 },
             ],
 
+            '@typescript-eslint/no-unused-vars': [
+                'error',
+                {
+                    argsIgnorePattern: '^_',
+                    varsIgnorePattern: '^_',
+                },
+            ],
             'react/no-unescaped-entities': 'off',
             'react/prop-types': 'off',
             '@typescript-eslint/no-empty-object-type': 'off',
+        },
+    },
+    // Node.js environment for CJS scripts and the Express server
+    {
+        files: ['**/*.cjs', 'server/**/*.ts', 'server/**/*.js'],
+        languageOptions: {
+            globals: {
+                ...globals.node,
+            },
+        },
+        rules: {
+            '@typescript-eslint/no-require-imports': 'off',
         },
     },
 ];

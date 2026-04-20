@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
-import { useCallback } from 'react';
+import * as React from 'react';
+import { type ReactNode, useCallback } from 'react';
 import { storageContext, type StorageContext } from './storage-context';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
@@ -9,13 +9,10 @@ import type { DBDependency } from '@/lib/domain/db-dependency';
 import type { Area } from '@/lib/domain/area';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
-import {
-    type Note,
-} from '@/lib/domain/note';
+import { type Note } from '@/lib/domain/note';
 import { apiGet, apiPost, apiPut, apiDelete } from '@/lib/api-client';
 
 export const StorageProvider = ({ children }: { children: ReactNode }) => {
-
     // Config operations
     const getConfig: StorageContext['getConfig'] = useCallback(async () => {
         return await apiGet<ChartDBConfig | undefined>('/api/config');
@@ -31,33 +28,31 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
     // Filter operations
     const getDiagramFilter: StorageContext['getDiagramFilter'] = useCallback(
         async (diagramId) => {
-            return await apiGet<DiagramFilter | undefined>(`/api/diagram-filters/${diagramId}`);
+            return await apiGet<DiagramFilter | undefined>(
+                `/api/diagram-filters/${diagramId}`
+            );
         },
         []
     );
 
-    const updateDiagramFilter: StorageContext['updateDiagramFilter'] = useCallback(
-        async (diagramId, filter) => {
+    const updateDiagramFilter: StorageContext['updateDiagramFilter'] =
+        useCallback(async (diagramId, filter) => {
             await apiPut(`/api/diagram-filters/${diagramId}`, filter);
-        },
-        []
-    );
+        }, []);
 
-    const deleteDiagramFilter: StorageContext['deleteDiagramFilter'] = useCallback(
-        async (diagramId) => {
+    const deleteDiagramFilter: StorageContext['deleteDiagramFilter'] =
+        useCallback(async (diagramId) => {
             await apiDelete(`/api/diagram-filters/${diagramId}`);
-        },
-        []
-    );
+        }, []);
 
     // Diagram Operations
     const listDiagrams: StorageContext['listDiagrams'] = useCallback(
-        async (options = {}) => {
-            const diagrams = await apiGet<Diagram[]>('/api/diagrams') || [];
-            return diagrams.map(d => ({
+        async (_options = {}) => {
+            const diagrams = (await apiGet<Diagram[]>('/api/diagrams')) || [];
+            return diagrams.map((d) => ({
                 ...d,
                 createdAt: new Date(d.createdAt),
-                updatedAt: new Date(d.updatedAt)
+                updatedAt: new Date(d.updatedAt),
             }));
         },
         []
@@ -66,15 +61,23 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
     const getDiagram: StorageContext['getDiagram'] = useCallback(
         async (id, options = {}) => {
             const queryParams = new URLSearchParams();
-            if (options.includeTables) queryParams.append('includeTables', 'true');
-            if (options.includeRelationships) queryParams.append('includeRelationships', 'true');
-            if (options.includeDependencies) queryParams.append('includeDependencies', 'true');
-            if (options.includeAreas) queryParams.append('includeAreas', 'true');
-            if (options.includeCustomTypes) queryParams.append('includeCustomTypes', 'true');
-            if (options.includeNotes) queryParams.append('includeNotes', 'true');
-            
+            if (options.includeTables)
+                queryParams.append('includeTables', 'true');
+            if (options.includeRelationships)
+                queryParams.append('includeRelationships', 'true');
+            if (options.includeDependencies)
+                queryParams.append('includeDependencies', 'true');
+            if (options.includeAreas)
+                queryParams.append('includeAreas', 'true');
+            if (options.includeCustomTypes)
+                queryParams.append('includeCustomTypes', 'true');
+            if (options.includeNotes)
+                queryParams.append('includeNotes', 'true');
+
             const query = queryParams.toString();
-            const diagram = await apiGet<Diagram | undefined>(`/api/diagrams/${id}${query ? `?${query}` : ''}`);
+            const diagram = await apiGet<Diagram | undefined>(
+                `/api/diagrams/${id}${query ? `?${query}` : ''}`
+            );
             if (diagram) {
                 diagram.createdAt = new Date(diagram.createdAt);
                 diagram.updatedAt = new Date(diagram.updatedAt);
@@ -115,7 +118,9 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
 
     const getTable: StorageContext['getTable'] = useCallback(
         async ({ diagramId, id }) => {
-            return await apiGet<DBTable | undefined>(`/api/tables/${id}?diagramId=${diagramId}`);
+            return await apiGet<DBTable | undefined>(
+                `/api/tables/${id}?diagramId=${diagramId}`
+            );
         },
         []
     );
@@ -145,17 +150,17 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
 
     const listTables: StorageContext['listTables'] = useCallback(
         async (diagramId) => {
-            return await apiGet<DBTable[]>(`/api/tables?diagramId=${diagramId}`);
+            return await apiGet<DBTable[]>(
+                `/api/tables?diagramId=${diagramId}`
+            );
         },
         []
     );
 
-    const deleteDiagramTables: StorageContext['deleteDiagramTables'] = useCallback(
-        async (diagramId) => {
+    const deleteDiagramTables: StorageContext['deleteDiagramTables'] =
+        useCallback(async (diagramId) => {
             await apiDelete(`/api/tables?diagramId=${diagramId}`);
-        },
-        []
-    );
+        }, []);
 
     // Relationship operations
     const addRelationship: StorageContext['addRelationship'] = useCallback(
@@ -167,38 +172,36 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
 
     const getRelationship: StorageContext['getRelationship'] = useCallback(
         async ({ diagramId, id }) => {
-            return await apiGet<DBRelationship | undefined>(`/api/relationships/${id}?diagramId=${diagramId}`);
+            return await apiGet<DBRelationship | undefined>(
+                `/api/relationships/${id}?diagramId=${diagramId}`
+            );
         },
         []
     );
 
-    const updateRelationship: StorageContext['updateRelationship'] = useCallback(
-        async ({ id, attributes }) => {
+    const updateRelationship: StorageContext['updateRelationship'] =
+        useCallback(async ({ id, attributes }) => {
             await apiPut(`/api/relationships/${id}`, attributes);
-        },
-        []
-    );
+        }, []);
 
-    const deleteRelationship: StorageContext['deleteRelationship'] = useCallback(
-        async ({ diagramId, id }) => {
+    const deleteRelationship: StorageContext['deleteRelationship'] =
+        useCallback(async ({ diagramId, id }) => {
             await apiDelete(`/api/relationships/${id}?diagramId=${diagramId}`);
-        },
-        []
-    );
+        }, []);
 
     const listRelationships: StorageContext['listRelationships'] = useCallback(
         async (diagramId) => {
-            return await apiGet<DBRelationship[]>(`/api/relationships?diagramId=${diagramId}`);
+            return await apiGet<DBRelationship[]>(
+                `/api/relationships?diagramId=${diagramId}`
+            );
         },
         []
     );
 
-    const deleteDiagramRelationships: StorageContext['deleteDiagramRelationships'] = useCallback(
-        async (diagramId) => {
+    const deleteDiagramRelationships: StorageContext['deleteDiagramRelationships'] =
+        useCallback(async (diagramId) => {
             await apiDelete(`/api/relationships?diagramId=${diagramId}`);
-        },
-        []
-    );
+        }, []);
 
     // Dependency operations
     const addDependency: StorageContext['addDependency'] = useCallback(
@@ -210,7 +213,9 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
 
     const getDependency: StorageContext['getDependency'] = useCallback(
         async ({ diagramId, id }) => {
-            return await apiGet<DBDependency | undefined>(`/api/dependencies/${id}?diagramId=${diagramId}`);
+            return await apiGet<DBDependency | undefined>(
+                `/api/dependencies/${id}?diagramId=${diagramId}`
+            );
         },
         []
     );
@@ -231,17 +236,17 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
 
     const listDependencies: StorageContext['listDependencies'] = useCallback(
         async (diagramId) => {
-            return await apiGet<DBDependency[]>(`/api/dependencies?diagramId=${diagramId}`);
+            return await apiGet<DBDependency[]>(
+                `/api/dependencies?diagramId=${diagramId}`
+            );
         },
         []
     );
 
-    const deleteDiagramDependencies: StorageContext['deleteDiagramDependencies'] = useCallback(
-        async (diagramId) => {
+    const deleteDiagramDependencies: StorageContext['deleteDiagramDependencies'] =
+        useCallback(async (diagramId) => {
             await apiDelete(`/api/dependencies?diagramId=${diagramId}`);
-        },
-        []
-    );
+        }, []);
 
     // Area operations
     const addArea: StorageContext['addArea'] = useCallback(
@@ -253,7 +258,9 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
 
     const getArea: StorageContext['getArea'] = useCallback(
         async ({ diagramId, id }) => {
-            return await apiGet<Area | undefined>(`/api/areas/${id}?diagramId=${diagramId}`);
+            return await apiGet<Area | undefined>(
+                `/api/areas/${id}?diagramId=${diagramId}`
+            );
         },
         []
     );
@@ -279,12 +286,10 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
         []
     );
 
-    const deleteDiagramAreas: StorageContext['deleteDiagramAreas'] = useCallback(
-        async (diagramId) => {
+    const deleteDiagramAreas: StorageContext['deleteDiagramAreas'] =
+        useCallback(async (diagramId) => {
             await apiDelete(`/api/areas?diagramId=${diagramId}`);
-        },
-        []
-    );
+        }, []);
 
     // CustomType operations
     const addCustomType: StorageContext['addCustomType'] = useCallback(
@@ -296,7 +301,9 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
 
     const getCustomType: StorageContext['getCustomType'] = useCallback(
         async ({ diagramId, id }) => {
-            return await apiGet<DBCustomType | undefined>(`/api/custom-types/${id}?diagramId=${diagramId}`);
+            return await apiGet<DBCustomType | undefined>(
+                `/api/custom-types/${id}?diagramId=${diagramId}`
+            );
         },
         []
     );
@@ -317,17 +324,17 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
 
     const listCustomTypes: StorageContext['listCustomTypes'] = useCallback(
         async (diagramId) => {
-            return await apiGet<DBCustomType[]>(`/api/custom-types?diagramId=${diagramId}`);
+            return await apiGet<DBCustomType[]>(
+                `/api/custom-types?diagramId=${diagramId}`
+            );
         },
         []
     );
 
-    const deleteDiagramCustomTypes: StorageContext['deleteDiagramCustomTypes'] = useCallback(
-        async (diagramId) => {
+    const deleteDiagramCustomTypes: StorageContext['deleteDiagramCustomTypes'] =
+        useCallback(async (diagramId) => {
             await apiDelete(`/api/custom-types?diagramId=${diagramId}`);
-        },
-        []
-    );
+        }, []);
 
     // Notes operations
     const addNote: StorageContext['addNote'] = useCallback(
@@ -339,7 +346,9 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
 
     const getNote: StorageContext['getNote'] = useCallback(
         async ({ diagramId, id }) => {
-            return await apiGet<Note | undefined>(`/api/notes/${id}?diagramId=${diagramId}`);
+            return await apiGet<Note | undefined>(
+                `/api/notes/${id}?diagramId=${diagramId}`
+            );
         },
         []
     );
@@ -365,12 +374,10 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
         []
     );
 
-    const deleteDiagramNotes: StorageContext['deleteDiagramNotes'] = useCallback(
-        async (diagramId) => {
+    const deleteDiagramNotes: StorageContext['deleteDiagramNotes'] =
+        useCallback(async (diagramId) => {
             await apiDelete(`/api/notes?diagramId=${diagramId}`);
-        },
-        []
-    );
+        }, []);
 
     return (
         <storageContext.Provider

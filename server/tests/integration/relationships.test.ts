@@ -10,7 +10,10 @@ describe('Relationships API', () => {
         await fetch(`${BASE_URL}/diagrams`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: diagramId, name: 'Diagrama Relaciones' })
+            body: JSON.stringify({
+                id: diagramId,
+                name: 'Diagrama Relaciones',
+            }),
         });
     });
 
@@ -30,14 +33,16 @@ describe('Relationships API', () => {
                 sourceFieldId: 'f1',
                 targetFieldId: 'f2',
                 sourceCardinality: 'one',
-                targetCardinality: 'many'
-            })
+                targetCardinality: 'many',
+            }),
         });
         expect(res.status).toBe(201);
     });
 
     it('GET /api/relationships?diagramId=... - Debe recuperar la relación', async () => {
-        const res = await fetch(`${BASE_URL}/relationships?diagramId=${diagramId}`);
+        const res = await fetch(
+            `${BASE_URL}/relationships?diagramId=${diagramId}`
+        );
         const data = await res.json();
         expect(res.status).toBe(200);
         expect(data.length).toBe(1);
@@ -45,14 +50,19 @@ describe('Relationships API', () => {
     });
 
     it('DELETE /api/relationships/:id - Debe eliminar la relación', async () => {
-        const res = await fetch(`${BASE_URL}/relationships/${relId}?diagramId=${diagramId}`, { 
-            method: 'DELETE' 
-        });
+        const res = await fetch(
+            `${BASE_URL}/relationships/${relId}?diagramId=${diagramId}`,
+            {
+                method: 'DELETE',
+            }
+        );
         expect(res.status).toBe(200);
 
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
-        const check = await fetch(`${BASE_URL}/relationships?diagramId=${diagramId}&t=${Date.now()}`);
+        const check = await fetch(
+            `${BASE_URL}/relationships?diagramId=${diagramId}&t=${Date.now()}`
+        );
         const data = await check.json();
         expect(data.length).toBe(0);
     });

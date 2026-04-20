@@ -1,20 +1,16 @@
 import { Router } from 'express';
-import prisma from '../db.js';
+import { ZodError } from 'zod';
+import { configService } from '../services/config.service.js';
 
 export const configRouter = Router();
 
 configRouter.get('/', async (req, res) => {
     try {
-        const config = await prisma.chartDBConfig.findUnique({
-            where: { id: 1 }
-        });
+        const config = await configService.get();
         if (!config) {
             return res.json(undefined);
         }
-        res.json({
-            ...config,
-            exportActions: config.exportActions ? JSON.parse(config.exportActions) : undefined
-        });
+        res.json(config);
     } catch (e) {
         console.error(e);
         res.status(500).json({ error: 'Internal server error' });
@@ -23,22 +19,15 @@ configRouter.get('/', async (req, res) => {
 
 configRouter.put('/', async (req, res) => {
     try {
-        const { exportActions, ...rest } = req.body;
-        const config = await prisma.chartDBConfig.upsert({
-            where: { id: 1 },
-            update: {
-                ...rest,
-                exportActions: exportActions ? JSON.stringify(exportActions) : undefined
-            },
-            create: {
-                id: 1,
-                ...rest,
-                defaultDiagramId: rest.defaultDiagramId || '',
-                exportActions: exportActions ? JSON.stringify(exportActions) : undefined
-            }
-        });
+        const config = await configService.update(req.body);
         res.json(config);
     } catch (e) {
+        if (e instanceof ZodError) {
+            return res.status(400).json({
+                error: 'Validation failed',
+                details: e.flatten(),
+            });
+        }
         console.error(e);
         res.status(500).json({ error: 'Internal server error' });
     }

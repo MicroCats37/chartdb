@@ -1,91 +1,79 @@
 import { Router } from 'express';
-import prisma from '../db.js';
+import { ZodError } from 'zod';
+import { noteService } from '../services/note.service.js';
 
 export const notesRouter = Router();
 
 notesRouter.get('/', async (req, res) => {
     try {
         const diagramId = req.query.diagramId as string;
-        const items = diagramId 
-            ? await prisma.note.findMany({ where: { diagramId } })
-            : await prisma.note.findMany();
+        const items = await noteService.list(diagramId);
         res.json(items);
-    } catch (e) {
+    } catch {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
 
 notesRouter.get('/:id', async (req, res) => {
     try {
-        const item = await prisma.note.findFirst({
-            where: { 
-                id: req.params.id,
-                diagramId: req.query.diagramId as string 
-            }
-        });
+        const diagramId = req.query.diagramId as string;
+        const item = await noteService.get(req.params.id, diagramId);
         res.json(item || undefined);
-    } catch (e) {
+    } catch {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
 
 notesRouter.post('/', async (req, res) => {
     try {
-        const { id, diagramId, content, x, y, width, height, color, order } = req.body;
-        await prisma.note.create({ 
-            data: {
-                id,
-                diagramId,
-                content: content || '',
-                x: x ?? 0,
-                y: y ?? 0,
-                width: width ?? 200,
-                height: height ?? 150,
-                color: color || '#ffffff',
-                order
-            } 
-        });
+        await noteService.create(req.body);
         res.sendStatus(201);
     } catch (e) {
-        console.error('[POST NOTE ERROR]', e);
+        if (e instanceof ZodError) {
+            return res.status(400).json({
+                error: 'Validation failed',
+                details: e.flatten(),
+            });
+        }
         res.status(500).json({ error: 'Internal server error' });
     }
 });
 
 notesRouter.put('/:id', async (req, res) => {
     try {
-        await prisma.note.update({
-            where: { id: req.params.id },
-            data: req.body
-        });
+        await noteService.update(req.params.id, req.body);
         res.sendStatus(200);
     } catch (e) {
+        if (e instanceof ZodError) {
+            return res.status(400).json({
+                error: 'Validation failed',
+                details: e.flatten(),
+            });
+        }
         res.status(500).json({ error: 'Internal server error' });
     }
 });
 
 notesRouter.delete('/:id', async (req, res) => {
     try {
-        await prisma.note.deleteMany({
-            where: { 
-                id: req.params.id,
-                ...(req.query.diagramId ? { diagramId: req.query.diagramId as string } : {})
-            }
-        });
+        const diagramId = req.query.diagramId as string;
+        await noteService.delete(req.params.id, diagramId);
         res.sendStatus(200);
-    } catch (e) {
+    } catch {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
 
 notesRouter.delete('/', async (req, res) => {
     try {
-        if (!req.query.diagramId) return res.status(400).json({ error: 'diagramId query parameter required' });
-        await prisma.note.deleteMany({
-            where: { diagramId: req.query.diagramId as string }
-        });
+        const diagramId = req.query.diagramId as string;
+        if (!diagramId)
+            return res
+                .status(400)
+                .json({ error: 'diagramId query parameter required' });
+        await noteService.deleteAll(diagramId);
         res.sendStatus(200);
-    } catch (e) {
+    } catch {
         res.status(500).json({ error: 'Internal server error' });
     }
 });

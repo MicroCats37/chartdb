@@ -46,10 +46,14 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
         relationships,
         updateArea,
         updateTablesState,
+        diagramId,
     } = useChartDB();
     const { schemasDisplayed } = useDiagramFilter();
-    const { openCreateRelationshipDialog, openImportDatabaseDialog } =
-        useDialog();
+    const {
+        openCreateRelationshipDialog,
+        openImportDatabaseDialog,
+        openCreateDiagramDialog,
+    } = useDialog();
     const { screenToFlowPosition, getNodes } = useReactFlow();
     const { t } = useTranslation();
     const { showDBViews } = useLocalConfig();
@@ -68,6 +72,21 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
 
     const createTableHandler = useCallback(
         async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            if (!diagramId) {
+                showAlert({
+                    title: t('side_panel.tables_section.no_diagram.title'),
+                    description: t(
+                        'side_panel.tables_section.no_diagram.description'
+                    ),
+                    actionLabel: t(
+                        'side_panel.tables_section.no_diagram.create_diagram'
+                    ),
+                    closeLabel: t('side_panel.tables_section.no_diagram.close'),
+                    onAction: openCreateDiagramDialog,
+                });
+                return;
+            }
+
             const position = screenToFlowPosition({
                 x: event.clientX,
                 y: event.clientY,
@@ -100,11 +119,30 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
             schemasDisplayed,
             setEditTableModeTable,
             databaseType,
+            diagramId,
+            showAlert,
+            openCreateDiagramDialog,
+            t,
         ]
     );
 
     const createViewHandler = useCallback(
         async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            if (!diagramId) {
+                showAlert({
+                    title: t('side_panel.tables_section.no_diagram.title'),
+                    description: t(
+                        'side_panel.tables_section.no_diagram.description'
+                    ),
+                    actionLabel: t(
+                        'side_panel.tables_section.no_diagram.create_diagram'
+                    ),
+                    closeLabel: t('side_panel.tables_section.no_diagram.close'),
+                    onAction: openCreateDiagramDialog,
+                });
+                return;
+            }
+
             const position = screenToFlowPosition({
                 x: event.clientX,
                 y: event.clientY,
@@ -138,6 +176,10 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
             schemasDisplayed,
             setEditTableModeTable,
             databaseType,
+            diagramId,
+            showAlert,
+            openCreateDiagramDialog,
+            t,
         ]
     );
 

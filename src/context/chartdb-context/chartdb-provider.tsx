@@ -304,8 +304,16 @@ export const ChartDBProvider: React.FC<
             setTables((currentTables) => [...currentTables, ...tablesToAdd]);
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
             await Promise.all([
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...promises,
                 ...tablesToAdd.map((table) =>
                     db.addTable({ diagramId, table })
                 ),
@@ -423,8 +431,18 @@ export const ChartDBProvider: React.FC<
 
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
+
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
+
             await Promise.all([
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...promises,
                 ...relationshipsToRemove.map((relationship) =>
                     db.deleteRelationship({ diagramId, id: relationship.id })
                 ),
@@ -487,8 +505,18 @@ export const ChartDBProvider: React.FC<
 
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
+
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
+
             await Promise.all([
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...promises,
                 db.updateTable({ id, attributes: table }),
             ]);
 
@@ -613,9 +641,15 @@ export const ChartDBProvider: React.FC<
 
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
-            promises.push(
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } })
-            );
+
+            if (diagramId) {
+                promises.push(
+                    db.updateDiagram({
+                        id: diagramId,
+                        attributes: { updatedAt },
+                    })
+                );
+            }
 
             await Promise.all(promises);
 
@@ -694,8 +728,18 @@ export const ChartDBProvider: React.FC<
 
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
+
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
+
             await Promise.all([
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...promises,
                 db.updateTable({
                     id: tableId,
                     attributes: {
@@ -767,8 +811,18 @@ export const ChartDBProvider: React.FC<
 
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
+
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
+
             await Promise.all([
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...promises,
                 db.updateTable({
                     id: tableId,
                     attributes: {
@@ -840,9 +894,17 @@ export const ChartDBProvider: React.FC<
 
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
-            await Promise.all([
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
-            ]);
+
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
+
+            await Promise.all([...promises]);
 
             if (options.updateHistory) {
                 addUndoAction({
@@ -913,8 +975,18 @@ export const ChartDBProvider: React.FC<
 
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
+
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
+
             await Promise.all([
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...promises,
                 db.updateTable({
                     id: tableId,
                     attributes: {
@@ -967,8 +1039,18 @@ export const ChartDBProvider: React.FC<
 
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
+
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
+
             await Promise.all([
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...promises,
                 db.updateTable({
                     id: tableId,
                     attributes: {
@@ -1039,8 +1121,18 @@ export const ChartDBProvider: React.FC<
 
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
+
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
+
             await Promise.all([
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...promises,
                 db.updateTable({
                     id: tableId,
                     attributes: {
@@ -1092,11 +1184,18 @@ export const ChartDBProvider: React.FC<
 
                 const updatedAt = new Date();
                 setDiagramUpdatedAt(updatedAt);
+
+                const promises = diagramId
+                    ? [
+                          db.updateDiagram({
+                              id: diagramId,
+                              attributes: { updatedAt },
+                          }),
+                      ]
+                    : [];
+
                 await Promise.all([
-                    db.updateDiagram({
-                        id: diagramId,
-                        attributes: { updatedAt },
-                    }),
+                    ...promises,
                     db.updateTable({
                         id: tableId,
                         attributes: {
@@ -1283,11 +1382,20 @@ export const ChartDBProvider: React.FC<
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
 
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
+
             await Promise.all([
                 ...relationships.map((relationship) =>
                     db.addRelationship({ diagramId, relationship })
                 ),
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...promises,
             ]);
 
             if (options.updateHistory) {
@@ -1475,11 +1583,20 @@ export const ChartDBProvider: React.FC<
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
 
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
+
             await Promise.all([
                 ...dependencies.map((dependency) =>
                     db.addDependency({ diagramId, dependency })
                 ),
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...promises,
             ]);
 
             if (options.updateHistory) {
@@ -1596,8 +1713,18 @@ export const ChartDBProvider: React.FC<
 
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
+
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
+
             await Promise.all([
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...promises,
                 db.updateDependency({ id, attributes: dependency }),
             ]);
 
@@ -1628,9 +1755,18 @@ export const ChartDBProvider: React.FC<
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
 
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
+
             await Promise.all([
                 ...areas.map((area) => db.addArea({ diagramId, area })),
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...promises,
             ]);
 
             if (options.updateHistory) {
@@ -1688,9 +1824,18 @@ export const ChartDBProvider: React.FC<
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
 
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
+
             await Promise.all([
                 ...ids.map((id) => db.deleteArea({ diagramId, id })),
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...promises,
             ]);
 
             if (prevAreas.length > 0 && options.updateHistory) {
@@ -1727,8 +1872,17 @@ export const ChartDBProvider: React.FC<
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
 
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
+
             await Promise.all([
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...promises,
                 db.updateArea({ id, attributes: area }),
             ]);
 
@@ -1752,9 +1906,18 @@ export const ChartDBProvider: React.FC<
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
 
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
+
             await Promise.all([
                 ...notes.map((note) => db.addNote({ diagramId, note })),
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...promises,
             ]);
 
             if (options.updateHistory) {
@@ -1812,9 +1975,18 @@ export const ChartDBProvider: React.FC<
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
 
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
+
             await Promise.all([
                 ...ids.map((id) => db.deleteNote({ diagramId, id })),
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...promises,
             ]);
 
             if (prevNotes.length > 0 && options.updateHistory) {
@@ -1851,8 +2023,17 @@ export const ChartDBProvider: React.FC<
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
 
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
+
             await Promise.all([
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...promises,
                 db.updateNote({ id, attributes: note }),
             ]);
 
@@ -1966,8 +2147,17 @@ export const ChartDBProvider: React.FC<
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
 
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
+
             await Promise.all([
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...promises,
                 ...customTypes.map((customType) =>
                     db.addCustomType({ diagramId, customType })
                 ),
@@ -2022,8 +2212,17 @@ export const ChartDBProvider: React.FC<
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
 
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
+
             await Promise.all([
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...promises,
                 ...ids.map((id) => db.deleteCustomType({ diagramId, id })),
             ]);
 
@@ -2071,8 +2270,17 @@ export const ChartDBProvider: React.FC<
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
 
+            const promises = diagramId
+                ? [
+                      db.updateDiagram({
+                          id: diagramId,
+                          attributes: { updatedAt },
+                      }),
+                  ]
+                : [];
+
             await Promise.all([
-                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...promises,
                 db.updateCustomType({ id, attributes: customType }),
             ]);
 

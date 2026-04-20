@@ -9,7 +9,7 @@ import { useLayout } from '@/hooks/use-layout';
 import { EmptyState } from '@/components/empty-state/empty-state';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { useTranslation } from 'react-i18next';
-import { useViewport } from '@xyflow/react';
+import { useReactFlow } from '@xyflow/react';
 import { useDialog } from '@/hooks/use-dialog';
 import type { DBSchema } from '@/lib/domain';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
@@ -17,20 +17,23 @@ import { filterTable } from '@/lib/domain/diagram-filter/filter';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { ButtonWithAlternatives } from '@/components/button/button-with-alternatives';
 import { useLocalConfig } from '@/hooks/use-local-config';
+import { useAlert } from '@/context/alert-context/alert-context';
 
 export interface TablesSectionProps {}
 
 export const TablesSection: React.FC<TablesSectionProps> = () => {
-    const { createTable, tables, databaseType, readonly } = useChartDB();
+    const { createTable, tables, databaseType, readonly, diagramId } =
+        useChartDB();
     const { filter, schemasDisplayed, hasActiveFilter, resetFilter } =
         useDiagramFilter();
-    const { openTableSchemaDialog } = useDialog();
-    const viewport = useViewport();
+    const { openTableSchemaDialog, openCreateDiagramDialog } = useDialog();
+    const { getViewport } = useReactFlow();
     const { t } = useTranslation();
     const { openTableFromSidebar } = useLayout();
     const [filterText, setFilterText] = React.useState('');
     const { showDBViews } = useLocalConfig();
     const filterInputRef = React.useRef<HTMLInputElement>(null);
+    const { showAlert } = useAlert();
 
     // First, filter tables by the diagram filter (schemas/tables visibility)
     // This is computed once and reused for both filteredTables and allTablesHiddenByDiagramFilter
@@ -69,19 +72,20 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     }, [tablesFilteredByDiagram, filterText, showDBViews]);
 
     const getCenterLocation = useCallback(() => {
+        const viewport = getViewport();
         const padding = 80;
         const centerX = -viewport.x / viewport.zoom + padding / viewport.zoom;
         const centerY = -viewport.y / viewport.zoom + padding / viewport.zoom;
 
-        return { centerX, centerY };
-    }, [viewport.x, viewport.y, viewport.zoom]);
+        return { x: centerX, y: centerY };
+    }, [getViewport]);
 
     const createTableWithLocation = useCallback(
         async ({ schema }: { schema?: DBSchema }) => {
-            const { centerX, centerY } = getCenterLocation();
+            const { x, y } = getCenterLocation();
             const table = await createTable({
-                x: centerX,
-                y: centerY,
+                x,
+                y,
                 schema: schema?.name,
             });
             openTableFromSidebar(table.id);
@@ -91,10 +95,10 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
 
     const createViewWithLocation = useCallback(
         async ({ schema }: { schema?: DBSchema }) => {
-            const { centerX, centerY } = getCenterLocation();
+            const { x, y } = getCenterLocation();
             const table = await createTable({
-                x: centerX,
-                y: centerY,
+                x,
+                y,
                 schema: schema?.name,
                 isView: true,
             });
@@ -106,6 +110,21 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
     const handleCreateTable = useCallback(
         async ({ view }: { view?: boolean }) => {
             setFilterText('');
+
+            if (!diagramId) {
+                showAlert({
+                    title: t('side_panel.tables_section.no_diagram.title'),
+                    description: t(
+                        'side_panel.tables_section.no_diagram.description'
+                    ),
+                    actionLabel: t(
+                        'side_panel.tables_section.no_diagram.create_diagram'
+                    ),
+                    closeLabel: t('side_panel.tables_section.no_diagram.close'),
+                    onAction: openCreateDiagramDialog,
+                });
+                return;
+            }
 
             if (schemasDisplayed.length > 1) {
                 openTableSchemaDialog({
@@ -128,11 +147,15 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
             }
         },
         [
+            t,
             createViewWithLocation,
             createTableWithLocation,
             schemasDisplayed,
             openTableSchemaDialog,
+            openCreateDiagramDialog,
             setFilterText,
+            diagramId,
+            showAlert,
         ]
     );
 
