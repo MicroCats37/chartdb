@@ -6,7 +6,7 @@
     "scripts": {
         "dev": "concurrently \"vite --host\" \"tsx watch server/src/index.ts\"",
         "dev:client": "vite --host",
-        "dev:server": "tsx watch server/src/index.ts",
+        "dev:server": "cd server && npx prisma db push --schema=prisma/schema.prisma --accept-data-loss && cd .. && tsx bootstrap.ts && tsx watch server/src/index.ts",
         "build": "npm run lint && tsc -b && vite build",
         "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
         "lint:fix": "npm run lint -- --fix",

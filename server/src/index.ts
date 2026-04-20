@@ -7,6 +7,7 @@ import { apiRouter } from './routes/index.js';
 
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { mcpServer } from './mcp/index.js';
+import prisma from './db.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -53,7 +54,14 @@ app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
     res.status(500).json({ error: 'Internal Server Error' });
 });
 
-app.listen(port, () => {
+app.listen(port, async () => {
+    try {
+        await prisma.$connect();
+        console.log('Database connection successful');
+    } catch (e) {
+        console.error('Database connection failed, exiting...', e);
+        process.exit(1);
+    }
     console.log(`ChartDB server running on port ${port}`);
 });
 // Trigger restart

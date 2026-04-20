@@ -1501,7 +1501,6 @@ Ref "fk_0_table_2_id_fk":"table_2"."id" - "table_1"."id"
         const result = generateDBMLFromDiagram(diagram);
 
         // Debug output removed
-        // console.log('Inline DBML:', result.inlineDbml);
 
         // Check standard DBML output
         expect(result.standardDbml).toContain('Table "users" {');

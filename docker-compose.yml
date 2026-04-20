@@ -2,7 +2,7 @@ services:
     backend:
         build:
             context: .
-            dockerfile: Dockerfile.dev
+            dockerfile: Dockerfile
         container_name: chartdb-backend
         ports:
             - '8099:3001'
