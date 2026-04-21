@@ -131,6 +131,13 @@ export const gu: LanguageTranslation = {
                 show_dbml: 'Show DBML Editor',
                 all_hidden: 'બધી ટેબલ્સ છુપાયેલી છે',
                 show_all: 'બધું બતાવો',
+                no_diagram: {
+                    title: 'No Diagram Open',
+                    description:
+                        'Please create a diagram first before adding tables.',
+                    create_diagram: 'Create Diagram',
+                    close: 'Cancel',
+                },
 
                 table: {
                     fields: 'ફીલ્ડ્સ',

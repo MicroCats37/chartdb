@@ -128,6 +128,13 @@ export const fr: LanguageTranslation = {
                 show_dbml: "Afficher l'éditeur DBML",
                 all_hidden: 'Toutes les tables sont masquées',
                 show_all: 'Tout afficher',
+                no_diagram: {
+                    title: 'No Diagram Open',
+                    description:
+                        'Please create a diagram first before adding tables.',
+                    create_diagram: 'Create Diagram',
+                    close: 'Cancel',
+                },
 
                 table: {
                     fields: 'Champs',

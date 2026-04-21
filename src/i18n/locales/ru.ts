@@ -128,6 +128,13 @@ export const ru: LanguageTranslation = {
                 show_dbml: 'Переключиться на редактор DBML',
                 all_hidden: 'Все таблицы скрыты',
                 show_all: 'Показать все',
+                no_diagram: {
+                    title: 'No Diagram Open',
+                    description:
+                        'Please create a diagram first before adding tables.',
+                    create_diagram: 'Create Diagram',
+                    close: 'Cancel',
+                },
 
                 table: {
                     fields: 'Поля',

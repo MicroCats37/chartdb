@@ -130,6 +130,13 @@ export const es: LanguageTranslation = {
                 show_dbml: 'Show DBML Editor',
                 all_hidden: 'Todas las tablas están ocultas',
                 show_all: 'Mostrar todo',
+                no_diagram: {
+                    title: 'Diagrama no abierto',
+                    description:
+                        'Por favor, crea o abre un diagrama antes de agregar tablas.',
+                    create_diagram: 'Crear Diagrama',
+                    close: 'Cerrar',
+                },
 
                 table: {
                     fields: 'Campos',
@@ -473,21 +480,18 @@ export const es: LanguageTranslation = {
             close: 'Ahora no',
             confirm: '¡Claro!',
         },
-
-        // TODO: Translate
         export_diagram_dialog: {
-            title: 'Export Diagram',
-            description: 'Choose the format for export:',
+            title: 'Exportar Diagrama',
+            description: 'Elige el formato para exportar:',
             format_json: 'JSON',
-            cancel: 'Cancel',
-            export: 'Export',
+            cancel: 'Cancelar',
+            export: 'Exportar',
             error: {
-                title: 'Error exporting diagram',
+                title: 'Error exportando diagrama',
                 description:
-                    'Something went wrong. Need help? support@chartdb.io',
+                    'Algo salió mal. ¿Necesitas ayuda? support@chartdb.io',
             },
         },
-        // TODO: Translate
         import_diagram_dialog: {
             title: 'Import Diagram',
             description: 'Paste the diagram JSON below:',
@@ -568,7 +572,6 @@ export const es: LanguageTranslation = {
         off: 'Apagado',
     },
 };
-
 export const esMetadata: LanguageMetadata = {
     name: 'Spanish',
     nativeName: 'Español',

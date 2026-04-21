@@ -130,6 +130,13 @@ export const tr: LanguageTranslation = {
                 show_dbml: 'Show DBML Editor',
                 all_hidden: 'Tüm tablolar gizli',
                 show_all: 'Tümünü göster',
+                no_diagram: {
+                    title: 'No Diagram Open',
+                    description:
+                        'Please create a diagram first before adding tables.',
+                    create_diagram: 'Create Diagram',
+                    close: 'Cancel',
+                },
 
                 table: {
                     fields: 'Alanlar',

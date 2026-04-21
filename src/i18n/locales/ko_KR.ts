@@ -130,6 +130,13 @@ export const ko_KR: LanguageTranslation = {
                 show_dbml: 'Show DBML Editor',
                 all_hidden: '모든 테이블이 숨겨져 있습니다',
                 show_all: '모두 표시',
+                no_diagram: {
+                    title: 'No Diagram Open',
+                    description:
+                        'Please create a diagram first before adding tables.',
+                    create_diagram: 'Create Diagram',
+                    close: 'Cancel',
+                },
 
                 table: {
                     fields: '필드',

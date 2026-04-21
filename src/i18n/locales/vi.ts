@@ -130,6 +130,13 @@ export const vi: LanguageTranslation = {
                 show_dbml: 'Show DBML Editor',
                 all_hidden: 'Tất cả bảng đã bị ẩn',
                 show_all: 'Hiển thị tất cả',
+                no_diagram: {
+                    title: 'No Diagram Open',
+                    description:
+                        'Please create a diagram first before adding tables.',
+                    create_diagram: 'Create Diagram',
+                    close: 'Cancel',
+                },
 
                 table: {
                     fields: 'Trường',

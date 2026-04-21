@@ -127,6 +127,13 @@ export const zh_TW: LanguageTranslation = {
                 show_dbml: 'Show DBML Editor',
                 all_hidden: '所有表格已隱藏',
                 show_all: '顯示全部',
+                no_diagram: {
+                    title: 'No Diagram Open',
+                    description:
+                        'Please create a diagram first before adding tables.',
+                    create_diagram: 'Create Diagram',
+                    close: 'Cancel',
+                },
 
                 table: {
                     fields: '欄位',

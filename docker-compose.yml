@@ -20,17 +20,15 @@ services:
     frontend:
         build:
             context: .
-            dockerfile: Dockerfile.dev
+            dockerfile: Dockerfile
+            args:
+                - VITE_API_URL=http://localhost:8099
         container_name: chartdb-frontend
         ports:
-            - '8098:5173'
+            - '8098:4173'
         environment:
-            - VITE_API_URL=http://chartdb-backend:3001
-            - NODE_ENV=development
-        volumes:
-            - .:/usr/src/app
-            - /usr/src/app/node_modules
-        command: npm run dev:client
+            - NODE_ENV=production
         depends_on:
             - backend
         restart: unless-stopped
+        command: npx vite preview --host --port 4173

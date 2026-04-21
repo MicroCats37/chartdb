@@ -1,5 +1,7 @@
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 export async function apiGet<T>(url: string): Promise<T> {
-    const response = await fetch(url);
+    const response = await fetch(`${API_BASE}${url}`);
     if (!response.ok) {
         throw new Error(`Failed to GET ${url}: ${response.statusText}`);
     }
@@ -9,7 +11,7 @@ export async function apiGet<T>(url: string): Promise<T> {
 }
 
 export async function apiPost<T>(url: string, body: unknown): Promise<T> {
-    const response = await fetch(url, {
+    const response = await fetch(`${API_BASE}${url}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -29,7 +31,7 @@ export async function apiPost<T>(url: string, body: unknown): Promise<T> {
 }
 
 export async function apiPut<T>(url: string, body: unknown): Promise<T> {
-    const response = await fetch(url, {
+    const response = await fetch(`${API_BASE}${url}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -46,7 +48,7 @@ export async function apiPut<T>(url: string, body: unknown): Promise<T> {
 }
 
 export async function apiDelete(url: string): Promise<void> {
-    const response = await fetch(url, {
+    const response = await fetch(`${API_BASE}${url}`, {
         method: 'DELETE',
     });
     if (!response.ok) {

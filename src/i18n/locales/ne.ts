@@ -131,6 +131,13 @@ export const ne: LanguageTranslation = {
                 show_dbml: 'Show DBML Editor',
                 all_hidden: 'सबै तालिकाहरू लुकेका छन्',
                 show_all: 'सबै देखाउनुहोस्',
+                no_diagram: {
+                    title: 'No Diagram Open',
+                    description:
+                        'Please create a diagram first before adding tables.',
+                    create_diagram: 'Create Diagram',
+                    close: 'Cancel',
+                },
 
                 table: {
                     fields: 'क्षेत्रहरू',

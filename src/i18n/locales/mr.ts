@@ -133,6 +133,13 @@ export const mr: LanguageTranslation = {
                 show_dbml: 'Show DBML Editor',
                 all_hidden: 'सर्व टेबल्स लपवलेले आहेत',
                 show_all: 'सर्व दाखवा',
+                no_diagram: {
+                    title: 'No Diagram Open',
+                    description:
+                        'Please create a diagram first before adding tables.',
+                    create_diagram: 'Create Diagram',
+                    close: 'Cancel',
+                },
 
                 table: {
                     fields: 'फील्ड्स',

@@ -130,6 +130,13 @@ export const id_ID: LanguageTranslation = {
                 show_dbml: 'Show DBML Editor',
                 all_hidden: 'Semua tabel tersembunyi',
                 show_all: 'Tampilkan semua',
+                no_diagram: {
+                    title: 'No Diagram Open',
+                    description:
+                        'Please create a diagram first before adding tables.',
+                    create_diagram: 'Create Diagram',
+                    close: 'Cancel',
+                },
 
                 table: {
                     fields: 'Kolom',

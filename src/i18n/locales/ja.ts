@@ -133,6 +133,13 @@ export const ja: LanguageTranslation = {
                 show_dbml: 'Show DBML Editor',
                 all_hidden: 'すべてのテーブルが非表示です',
                 show_all: 'すべて表示',
+                no_diagram: {
+                    title: 'No Diagram Open',
+                    description:
+                        'Please create a diagram first before adding tables.',
+                    create_diagram: 'Create Diagram',
+                    close: 'Cancel',
+                },
 
                 table: {
                     fields: 'フィールド',

@@ -131,6 +131,13 @@ export const te: LanguageTranslation = {
                 show_dbml: 'Show DBML Editor',
                 all_hidden: 'అన్ని పట్టికలు దాచబడ్డాయి',
                 show_all: 'అన్ని చూపించు',
+                no_diagram: {
+                    title: 'No Diagram Open',
+                    description:
+                        'Please create a diagram first before adding tables.',
+                    create_diagram: 'Create Diagram',
+                    close: 'Cancel',
+                },
 
                 table: {
                     fields: 'ఫీల్డులు',

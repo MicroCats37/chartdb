@@ -131,6 +131,13 @@ export const de: LanguageTranslation = {
                 show_dbml: 'Show DBML Editor',
                 all_hidden: 'Alle Tabellen sind ausgeblendet',
                 show_all: 'Alle anzeigen',
+                no_diagram: {
+                    title: 'No Diagram Open',
+                    description:
+                        'Please create a diagram first before adding tables.',
+                    create_diagram: 'Create Diagram',
+                    close: 'Cancel',
+                },
 
                 table: {
                     fields: 'Felder',

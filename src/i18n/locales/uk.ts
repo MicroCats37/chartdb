@@ -129,6 +129,13 @@ export const uk: LanguageTranslation = {
                 show_dbml: 'Show DBML Editor',
                 all_hidden: 'Всі таблиці приховані',
                 show_all: 'Показати все',
+                no_diagram: {
+                    title: 'No Diagram Open',
+                    description:
+                        'Please create a diagram first before adding tables.',
+                    create_diagram: 'Create Diagram',
+                    close: 'Cancel',
+                },
 
                 table: {
                     fields: 'Поля',

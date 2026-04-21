@@ -128,6 +128,13 @@ export const hr: LanguageTranslation = {
                 show_dbml: 'Prikaži DBML uređivač',
                 all_hidden: 'Sve tablice su skrivene',
                 show_all: 'Prikaži sve',
+                no_diagram: {
+                    title: 'No Diagram Open',
+                    description:
+                        'Please create a diagram first before adding tables.',
+                    create_diagram: 'Create Diagram',
+                    close: 'Cancel',
+                },
 
                 table: {
                     fields: 'Polja',
